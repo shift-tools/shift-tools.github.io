@@ -87,15 +87,16 @@
                             </div>
                             <!-- /input-group -->
                         </li>
+                        <div class='toScroll' style='height: 85vh; overflow-y: scroll; position: relative; display: block; padding: 10px 15px;'>
                         <li>
-                            <a href="delegates.html?username=enthusiast_developer" style="color: red"><i class="fa fa-dashboard fa-fw"></i>Enthusiast Developer</a>
+                            <a href="delegates.html?username=enthusiast_developer" style="color: red; display: block; padding: 12px 10px;"><i class="fa fa-dashboard fa-fw"></i>Enthusiast Developer</a>
                         </li>
-                        <li ng-repeat="delegate in delegates">
-                            <a href="delegates.html?username={{delegate.username}}"><i class="fa fa-dashboard fa-fw"></i>{{delegate.username}}</a>
-                        </li>
-                        <li>
-                            <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
-                        </li>
+                            <li ng-repeat="delegate in delegates | limitTo:101">
+                                <a href="delegates.html?username={{delegate.username}}" style='display: block; padding: 12px 10px;'><i class="fa fa-dashboard fa-fw" ></i> {{$index + 1}} - {{delegate.username}}</a>
+                            </li>
+                        </div>
+
+
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

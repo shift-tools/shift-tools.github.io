@@ -78,7 +78,7 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="delegates.html?username=enthusiast_developer"><i class="fa fa-dashboard fa-fw"></i>Enthusiast Developer</a>
+                            <a href="delegates.html?username=enthusiast_developer" style="color: red"><i class="fa fa-dashboard fa-fw"></i>Enthusiast Developer</a>
                         </li>
                         <li ng-repeat="delegate in delegates">
                             <a href="delegates.html?username={{delegate.username}}"><i class="fa fa-dashboard fa-fw"></i>{{delegate.username}}</a>
@@ -126,7 +126,7 @@
                                     <i class="fa fa-user fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="mediumsize">{{delegate.username}}</div>
+                                    <div class="mediumsize" style='color: greenyellow; font-weight: bolder;'>{{delegate.username}}</div>
                                     <br>
                                     <div>Delegate / Pool name</div>
                                 </div>

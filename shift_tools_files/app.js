@@ -41,7 +41,7 @@ app.controller('indexCtrl', function($scope, $http) {
             $('#home-tab').trigger('click');
 
 
-            $http.get('https://wallet.shiftnrg.org/api/delegates?address=' + res.data.delegate.username).then (function (res) {
+            $http.get('https://wallet.shiftnrg.org/api/accounts/delegates?address=' + res.data.delegate.address).then (function (res) {
                 $scope.votes = res.data.delegates;
             });
 

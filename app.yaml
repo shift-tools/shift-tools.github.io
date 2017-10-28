@@ -1,15 +1,6 @@
-runtime: php55
+runtime: php
+env: flex
 
-handlers:
-
-# Handle the main page by serving the index page.
-# Note the $ to specify the end of the path, since app.yaml does prefix matching.
-- url: /$
-  static_files: index.html
-  upload: index.html
-
-
-# Handle nearly every other file by just serving it.
-- url: /(.+)
-  static_files: /\1
-  upload: /(.*)
+runtime_config:
+  document_root: .
+  front_controller_file: index.html

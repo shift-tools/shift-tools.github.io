@@ -1,0 +1,10 @@
+runtime: php
+env: flex
+
+runtime_config:
+  document_root: ./
+
+handlers:
+  - url: /
+    static_files: public/index.html
+    upload: public/index.html

@@ -15,7 +15,25 @@ app.controller('indexCtrl', function($scope, $http) {
         $scope.delegate = res.data.delegate;
 
         $http.get('https://wallet.shiftnrg.org/api/delegates/voters?publicKey=' + res.data.delegate.publicKey).then (function (res) {
-            $scope.voters = res.data.accounts;
+           $scope.voters = res.data.accounts;
+
+           setTimeout(function () {
+             $(".username").each(function(index, item) {
+                value = $(item).text();
+                item.innerHTML = "<a href='index.html?username=" + value +"'>"+ value +"</a>";
+             });
+            
+            $('table#dataTables-example').dataTable(
+                    {
+                        aaSorting: [[3, 'desc']],
+                        "drawCallback": function( settings ) {
+                            $('#VotesTable').show('slow');
+                            $('#spinner').hide('slow')
+                        }
+                    }
+                );
+                
+            }, 3000);
         });
     });
 

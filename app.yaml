@@ -1,4 +1,4 @@
-runtime: php
+runtime: php5.5
 env: flex
 
 runtime_config:
@@ -6,5 +6,5 @@ runtime_config:
 
 handlers:
   - url: /
-    static_files: public/index.html
-    upload: public/index.html
+    static_files: ./index.html
+    upload: ./index.html

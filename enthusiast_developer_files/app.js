@@ -26,7 +26,7 @@ app.controller('indexCtrl', function($scope, $http) {
     $scope.nextpayout = 0;
 
     if (window.location.search.substr(10) == '') {
-        var user = 'enthusiast_developer';
+        var user = 'shift_tools';
     }
     else {
         var user = window.location.search.substr(10);

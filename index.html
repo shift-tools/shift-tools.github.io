@@ -91,7 +91,7 @@
                         <li>
                             <a href="delegates.html?username=enthusiast_developer" style="color: red; display: block; padding: 12px 10px;"><i class="fa fa-dashboard fa-fw"></i>Enthusiast Developer</a>
                         </li>
-                            <li ng-repeat="delegate in delegates | limitTo:101">
+                            <li ng-repeat="delegate in first_delegates | limitTo:101">
                                 <a href="delegates.html?username={{delegate.username}}" style='display: block; padding: 12px 10px;'><i class="fa fa-dashboard fa-fw" ></i> {{$index + 1}} - {{delegate.username}}</a>
                             </li>
                         </div>
@@ -124,6 +124,22 @@
                                     <div class="mediumsize">{{delegates.length}}</div>
                                     <br>
                                     <div>Number of Forging Delegates</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tachometer fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="mediumsize">{{totalCount}}</div>
+                                    <br>
+                                    <div>Number of Delegates</div>
                                 </div>
                             </div>
                         </div>

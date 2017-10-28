@@ -53,11 +53,22 @@ app.controller('indexCtrl', function($scope, $http) {
         });
     }
     // if route is index
-    $http.get('https://wallet.shiftnrg.org/api/delegates?limit=101').then (function (res) {
+    $http.get('https://wallet.shiftnrg.org/api/delegates').then (function (res) {
+        $scope.first_delegates = res.data.delegates;
         $scope.delegates = res.data.delegates;
-        
+        $scope.totalCount = res.data.totalCount;
+
         if ((window.location.href.split('/').pop() === "") || (window.location.href.split('/').pop() === "index.html") ) {
-            parseTable(6, 'asc');
+            setTimeout(function () {
+                parseTable(6, 'asc');
+            }, 4000);
+
+            const loop = [...Array(8)].map((_, i) => {
+                console.log(i);
+              $http.get('https://wallet.shiftnrg.org/api/delegates?offset='+parseInt(i+1)+'01').then (function (res) {
+                $scope.delegates = res.data.delegates.concat($scope.delegates);
+              });
+            });
         }
     });
 

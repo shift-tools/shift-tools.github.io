@@ -119,21 +119,6 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-tasks fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">{{delegate.rank}}</div>
-                                    <div>Rank</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <div class="row">
@@ -144,6 +129,36 @@
                                     <div class="mediumsize">{{delegate.username}}</div>
                                     <br>
                                     <div>Delegate / Pool name</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-coin fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">Daily</div>
+                                    <div>Reward Frequency</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{delegate.rank}}</div>
+                                    <div>Rank</div>
                                 </div>
                             </div>
                         </div>
@@ -163,23 +178,24 @@
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
-                            <thead>
-                                <tr>
-                                    <th>Username</th>
-                                    <th>Address</th>
-                                    <th>PublicKey</th>
-                                    <th>Balance</th>
-                                </tr>
-                            </thead>
-                            <tbody ng-repeat="votant in voters">
-                                <tr>
-                                    <td>{{votant.username}}</td>
-                                    <td>{{votant.address}}</td>
-                                    <td>{{votant.publicKey}}</td>
-                                    <td>{{votant.balance}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <div class='VotesTable' style="display: none;">
+                                <div class="panel-body">
+                                    <table width="100%" class="table table-striped table-bordered table-hover display" id="dataTables-example">
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Address</th>
+                                                <th class="sorting_desc">Balance</th>
+                                            </tr>
+                                        </thead>
+                                        <tr ng-repeat="voter in voters">
+                                            <td class='username'>{{voter.username}}</td>
+                                            <td>{{voter.address}}</td>
+                                            <td>{{voter.balance}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                     </div>
                     <!-- /.panel-body -->
                 </div>

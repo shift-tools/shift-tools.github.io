@@ -11,7 +11,7 @@ function parseTable(order, ascdesc) {
             {
                 aaSorting: [[order, ascdesc]],
                 "drawCallback": function( settings ) {
-                    $('#VotesTable').show('slow');
+                    $('.VotesTable').show('slow');
                     $('#spinner').hide('slow')
                 }
             }
@@ -38,11 +38,17 @@ app.controller('indexCtrl', function($scope, $http) {
         $http.get ('https://wallet.shiftnrg.org/api/delegates/get?username=' + user).then (function (res) {
             $scope.delegate = res.data.delegate;
 
+            $('#home-tab').trigger('click');
+
+
+            $http.get('https://wallet.shiftnrg.org/api/delegates?address=' + res.data.delegate.username).then (function (res) {
+                $scope.votes = res.data.delegates;
+            });
+
             $http.get('https://wallet.shiftnrg.org/api/delegates/voters?publicKey=' + res.data.delegate.publicKey).then (function (res) {
                $scope.voters = res.data.accounts;
 
-                parseTable(3, 'desc');
-
+                parseTable(2, 'desc');
             });
         });
     }

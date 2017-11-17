@@ -1,4 +1,78 @@
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('s z=1i.1j(\'1u\',[]);7 r(B,E){J(7(){$(".p").1m(7(K,t){u=$(t).16();t.11="<a k=\'4.I?p="+u+"\'>"+u+"</a>"});$(\'Z#Y-X\').12({13:[[B,E]],"W":7(14){$(\'.18\').T(\'A\');$(\'#O\').Q(\'A\')}})},M)}z.V(\'U\',7($5,$d){$5.o=[];$5.R=0;$5.S=0;v(c.b.C.y(10)==\'\'){s q=\'15\'}1v{s q=c.b.C.y(10)}v((c.b.k.D("/4")>-1)||(c.b.k.D("/1r")>-1)){$d.e(\'h://g.f.j/l/4/e?p=\'+q).m(7(3){$5.n=3.9.n;$(\'#1s-1l\').1k(\'1d\');$d.e(\'h://g.f.j/l/o/4?F=\'+3.9.n.F).m(7(3){$5.1b=3.9.4});$d.e(\'h://g.f.j/l/4/x?G=\'+3.9.n.G).m(7(3){$5.x=3.9.o;r(2,\'1h\')})})}$d.e(\'h://g.f.j/l/4\').m(7(3){$5.1g=3.9.4;$5.4=3.9.4;$5.w=3.9.w;v((c.b.k.H(\'/\').L()==="")||(c.b.k.H(\'/\').L()==="K.I")){J(7(){r(6,\'1f\')},1e);1a 1c=[...1t(8)].1q((1n,i)=>{19.1p(i);$d.e(\'h://g.f.j/l/4?P=\'+N(i+1)+\'1o\').m(7(3){$5.4=3.9.4.17($5.4)})})}})});',62,94,'|||res|delegates|scope||function||data||location|window|http|get|shiftnrg|wallet|https||org|href|api|then|delegate|accounts|username|user|parseTable|var|item|value|if|totalCount|voters|substr|app|slow|order|search|indexOf|ascdesc|address|publicKey|split|html|setTimeout|index|pop|3000|parseInt|spinner|offset|hide|lastpayout|nextpayout|show|indexCtrl|controller|drawCallback|example|dataTables|table||innerHTML|dataTable|aaSorting|settings|shift_tools|text|concat|VotesTable|console|const|votes|loop|click|4000|asc|first_delegates|desc|angular|module|trigger|tab|each|_|01|log|map|pool|home|Array|delegateApp|else'.split('|'),0,{}))
+var app = angular.module('delegateApp', []);
+
+function parseTable(order, ascdesc) {
+    setTimeout(function () {
+     $(".username").each(function(index, item) {
+        value = $(item).text();
+        item.innerHTML = "<a href='delegates.html?username=" + value +"'>"+ value +"</a>";
+     });
+
+    $('table#dataTables-example').dataTable(
+            {
+                aaSorting: [[order, ascdesc]],
+                "drawCallback": function( settings ) {
+                    $('.VotesTable').show('slow');
+                    $('#spinner').hide('slow')
+                }
+            }
+        );    
+    }, 3000);
+}
+
+
+app.controller('indexCtrl', function($scope, $http) {
+    $scope.accounts = [];
+    $scope.lastpayout = 0;
+    $scope.nextpayout = 0;
+
+    if (window.location.search.substr(10) == '') {
+        var user = 'shift_tools';
+    }
+    else {
+        var user = window.location.search.substr(10);
+    }
+
+
+    // if route is delegates show
+    if ((window.location.href.indexOf("/delegates") > -1) || (window.location.href.indexOf("/pool") > -1)) {
+        $http.get ('https://wallet.shiftnrg.org/api/delegates/get?username=' + user).then (function (res) {
+            $scope.delegate = res.data.delegate;
+
+            $('#home-tab').trigger('click');
+
+
+            $http.get('https://wallet.shiftnrg.org/api/accounts/delegates?address=' + res.data.delegate.address).then (function (res) {
+                $scope.votes = res.data.delegates;
+            });
+
+            $http.get('https://wallet.shiftnrg.org/api/delegates/voters?publicKey=' + res.data.delegate.publicKey).then (function (res) {
+               $scope.voters = res.data.accounts;
+
+                parseTable(2, 'desc');
+            });
+        });
+    }
+    // if route is index
+    $http.get('https://wallet.shiftnrg.org/api/delegates').then (function (res) {
+        $scope.first_delegates = res.data.delegates;
+        $scope.delegates = res.data.delegates;
+        $scope.totalCount = res.data.totalCount;
+
+        if ((window.location.href.split('/').pop() === "") || (window.location.href.split('/').pop() === "index.html") ) {
+            setTimeout(function () {
+                parseTable(6, 'asc');
+            }, 4000);
+
+            const loop = [...Array(8)].map((_, i) => {
+                console.log(i);
+              $http.get('https://wallet.shiftnrg.org/api/delegates?offset='+parseInt(i+1)+'01').then (function (res) {
+                $scope.delegates = res.data.delegates.concat($scope.delegates);
+              });
+            });
+        }
+    });
+
+});
 if (location.protocol == 'http:')
 {
  location.href = 'https:' + window.location.href.substring(window.location.protocol.length);

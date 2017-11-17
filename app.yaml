@@ -4,3 +4,10 @@ env: flex
 runtime_config:
   document_root: .
   front_controller_file: index.html
+  secure: always
+
+handlers:
+- url: /*
+  static_files: index.html
+  upload: index.html
+  secure: always

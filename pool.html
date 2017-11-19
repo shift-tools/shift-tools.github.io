@@ -56,9 +56,8 @@
             </div>
             <ul class="nav navbar-nav" style='margin-left: 8%;'>
               <li><a href="index.html">Delegates</a></li>
-              <li class="active"><a href="./navbar-fixed-top/">Pool</a></li>
+              <li class="active"><a href="pool.html">Pool</a></li>
               <li><a href="lametric.html">Lametric</a></li>
-              <li><a href="#">Lottery</a></li>
             </ul>
             <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
@@ -111,16 +110,15 @@
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-yellow">
+                    <div class="panel panel-green">
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <i class="fa fa-address-card fa-5x"></i>
+                                    <i class="fa fa-gift fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="mediumsize">{{delegate.address}}</div>
-                                    <br>
-                                    <div>Pool Address</div>
+                                    <div class="huge">LAMETRIC</div>
+                                    <div>This month's Prize</div>
                                 </div>
                             </div>
                         </div>
@@ -150,23 +148,23 @@
                                     <i class="fa fa-coin fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">Daily</div>
-                                    <div>Reward Frequency</div>
+                                    <div class="huge">17/12/2017</div>
+                                    <div>Results date</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-green">
+            <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <i class="fa fa-tasks fa-5x"></i>
+                                    <i class="fa fa-money fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">{{delegate.rank}}</div>
-                                    <div>Rank</div>
+                                    <div class="huge">$0</div>
+                                    <div>Bank</div>
                                 </div>
                             </div>
                         </div>
@@ -177,7 +175,20 @@
         <div class="row">
             <div class="col-lg-12">
                 <br><br>
-                <b style="color: red">Vote for me for us to get this pool working ! I've already set up the server and I will activate the Rewards once this indicator shows < 101 ;))</b><br><br><br>
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            How to Participate ?
+                        </div>
+                        <div class="panel-body">
+                            <p>
+                                <b style="color: green">On Ryver, people went crazy about the idea of having a pool that rewards with physical gift, so here we go ! This month, <a href='https://www.amazon.fr/LaMetric-r%C3%A9veil-connect%C3%A9-intelligent/dp/B01IVTVK3W'>we will offer a Lametric, worth 300 dollars !</a></b><br><br><br></br>Quite simple ! You need to vote <b>Shift_Pool</b> for one entire month with 3 confirmations. You get one <b>confirmation</b> per week. <ul><li>The winner has one month to claim his gain</li><li>A winner can not win two times in a row</li><li><b>Shift_Tools</b>'s private address can not participate</li><li>If the winner does not claim his gain, the reward will be put in the <b>Bank</b> (as Shift)</li><li><u>BREAK THE BANK !</u> At the end of the year, the Community will decide what to do with the bank ! Play a game ? A Lotto ? Fair redistribution ? This is <b>YOUR</b> choice !</li><br>
+                            </p>
+                        </div>
+                        <div class="panel-footer">
+                            You won this month ? Claim your gain now ! Send a random ammount between 0.1 and 0.5 Shift to <b>Shift_Pools</b> from the winner's address, and immediately send an email to <a href="mailto:contact@sidney.email">me</a> describing how many shift did you sent to check your identity !
+                        </div>
+                    </div>
+
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -194,12 +205,14 @@
                                                 <th>Username</th>
                                                 <th>Address</th>
                                                 <th class="sorting_desc">Balance</th>
+                                                <th>Confirmation</th>
                                             </tr>
                                         </thead>
                                         <tr ng-repeat="voter in voters">
-                                            <td class='username'>{{voter.username}}</td>
-                                            <td>{{voter.address}}</td>
-                                            <td>{{voter.balance}}</td>
+                                            <td ng-if="voter.address!='12563548085247833132S'" class='username'>{{voter.username}}</td>
+                                            <td ng-if="voter.address!='12563548085247833132S'">{{voter.address}}</td>
+                                            <td ng-if="voter.address!='12563548085247833132S'">{{voter.balance}}</td>
+                                            <td ng-if="voter.address!='12563548085247833132S'">{{participants[voter.address] || 1}} / 3</td>
                                         </tr>
                                     </table>
                                 </div>

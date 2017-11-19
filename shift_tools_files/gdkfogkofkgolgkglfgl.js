@@ -35,6 +35,13 @@ app.controller('indexCtrl', function($scope, $http) {
 
     // if route is delegates show
     if ((window.location.href.indexOf("/delegates") > -1) || (window.location.href.indexOf("/pool") > -1)) {
+
+    	if (window.location.href.indexOf("/pool") > -1) {
+	        $http.get('http://51.255.196.160:8000/data.json').then (function (res) {
+	            $scope.participants = res.data;
+        	});
+    	}
+
         $http.get ('https://wallet.shiftnrg.org/api/delegates/get?username=' + user).then (function (res) {
             $scope.delegate = res.data.delegate;
 

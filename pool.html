@@ -56,7 +56,7 @@
             </div>
             <ul class="nav navbar-nav" style='margin-left: 8%;'>
               <li><a href="index.html">Delegates</a></li>
-              <li class="active"><a href="pool.html">Pool</a></li>
+              <li class="active"><a href="pool.html">Lottery</a></li>
               <li><a href="lametric.html">Lametric</a></li>
             </ul>
             <ul class="nav navbar-top-links navbar-right">
@@ -174,21 +174,41 @@
 
         <div class="row">
             <div class="col-lg-12">
+                <p><b style="color: green">On Ryver, people went crazy about the idea of having a pool that rewards with physical gift, so here we go ! This month, <a href='https://www.amazon.fr/LaMetric-r%C3%A9veil-connect%C3%A9-intelligent/dp/B01IVTVK3W'>we will offer a Lametric, worth 300 dollars !</a></p><br></b>
                 <br><br>
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            How to Participate ?
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        How to Participate ?
+                    </div>
+                    <div class="panel-body">
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <h1 align='center'><b><u style='color: green'>PROVABLY FAIR !</u></b></h1><h3 align='center'>Quite simple ! You need to vote <b>Shift_Pool</b> for one entire month with at least 3 confirmations. You get one <b>confirmation</b> per week.</h3><br>
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <p>
-                                <b style="color: green">On Ryver, people went crazy about the idea of having a pool that rewards with physical gift, so here we go ! This month, <a href='https://www.amazon.fr/LaMetric-r%C3%A9veil-connect%C3%A9-intelligent/dp/B01IVTVK3W'>we will offer a Lametric, worth 300 dollars !</a></b><br><br><br></br>Quite simple ! You need to vote <b>Shift_Pool</b> for one entire month with 3 confirmations. You get one <b>confirmation</b> per week. <ul><li>The winner has one month to claim his gain</li><li>A winner can not win two times in a row</li><li><b>Shift_Tools</b>'s private address can not participate</li><li>If the winner does not claim his gain, the reward will be put in the <b>Bank</b> (as Shift)</li><li><u>BREAK THE BANK !</u> At the end of the year, the Community will decide what to do with the bank ! Play a game ? A Lotto ? Fair redistribution ? This is <b>YOUR</b> choice !</li><br>
-                            </p>
+                        <div class='row'>
+                            <div class='col-lg-6'>
+                                <p>
+                                    <ul><h4><u>Rules:</u></h4><li>The winner has one month to claim his gain</li><li>If the winner does not claim his gain or if he  has not enough confirmations, the reward will be put in the <b>Bank</b> (as Fiat)</li><li>A winner can not win two times in a row</li><br>
+                                </p>
+                            </div>
+                            <div class='col-lg-6'>
+                                <p>
+                                   <br>
+                                   <ul><li>The more vote power you have, the more tickets you get</li><li>Minimum vote weight threshold to participate has to be over <b>0.01%</b></li><li>The winning number is based on the 4 last numbers <a href='https://explorer.shiftnrg.org/'>of the first block of the results date.</a></li></ul>
+                                </p>
+                            </div>
                         </div>
-                        <div class="panel-footer">
-                            You won this month ? Claim your gain now ! Send a random ammount between 0.1 and 0.5 Shift to <b>Shift_Pools</b> from the winner's address, and immediately send an email to <a href="mailto:contact@sidney.email">me</a> describing how many shift did you sent to check your identity !
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <p align='center' style='color: red'><u>BREAK THE BANK !</u> At the end of the year, the Community will decide what to do with the bank ! Play a game ? Fair redistribution ? This is <b>YOUR</b> choice !</p>
+                            </div>
                         </div>
                     </div>
-
+                    <div class="panel-footer">
+                        You won this month ? Claim your gain now ! Send a random amount between 0.1 and 0.5 Shift to <b>Shift_Pools</b> from the winner's address, and immediately send an email to <a href="mailto:contact@sidney.email">me</a> describing how many shift did you sent to check your identity !
+                    </div>
+                </div>
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -205,14 +225,19 @@
                                                 <th>Username</th>
                                                 <th>Address</th>
                                                 <th class="sorting_desc">Balance</th>
+                                                <th>Win success rate</th>
+                                                <th>Ticket Numbers</th>
                                                 <th>Confirmation</th>
                                             </tr>
                                         </thead>
                                         <tr ng-repeat="voter in voters">
-                                            <td ng-if="voter.address!='12563548085247833132S'" class='username'>{{voter.username}}</td>
-                                            <td ng-if="voter.address!='12563548085247833132S'">{{voter.address}}</td>
-                                            <td ng-if="voter.address!='12563548085247833132S'">{{voter.balance}}</td>
-                                            <td ng-if="voter.address!='12563548085247833132S'">{{participants[voter.address] || 1}} / 3</td>
+                                            <!--  && getPercentage(((voter.balance / delegate.vote))*100) != 0.00 !-->
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'" class='username'>{{voter.username}}</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'" >{{voter.address}}</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{voter.balance}}</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{getPercentage(((voter.balance / delegate.vote))*100)}}%</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{getTicketsRange(getPercentage(((voter.balance / delegate.vote))*100), $index, voters.length)}}</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{participants[voter.address] || 1}} / 3</td>
                                         </tr>
                                     </table>
                                 </div>

@@ -10,6 +10,7 @@
     <meta name="author" content="">
     <script src="./shift_tools_files/angular.min.js"></script>
     <script src="./shift_tools_files/moment.min.js"></script>
+    <script src="./vendor/yaml/js-yaml.js"></script>
     <script src="./shift_tools_files/gdkfogkofkgolgkglfgl.js"></script>
 
     <title>Shift-Tools</title>
@@ -56,8 +57,8 @@
 
             </div>
             <ul class="nav navbar-nav" style='margin-left: 8%;'>
-              <li class="active"><a href="index.html">List of Delegates</a></li>
-              <li><a href="pools.html">List of Active Pools</a></li>
+              <li><a href="index.html">List of Delegates</a></li>
+              <li class="active"><a href="pools.html">List of Active Pools</a></li>
               <li><a href="lottery.html">Lottery</a></li>
               <li><a href="lametric.html">Lametric</a></li>
             </ul>
@@ -107,23 +108,23 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">List of Delegates</h1>
+                    <h1 class="page-header">List of Active Pools</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-yellow">
+                    <div class="panel panel-green">
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <i class="fa fa-address-card fa-5x"></i>
+                                    <i class="fa fa-users fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="mediumsize">101</div>
+                                    <div class="mediumsize">{{countPools}}</div>
                                     <br>
-                                    <div>Number of Forging Delegates</div>
+                                    <div>Number of Known Pools</div>
                                 </div>
                             </div>
                         </div>
@@ -145,12 +146,62 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-heart fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="mediumsize"><a href='delegates.html?username=vekexasia'>Vekexasia</a></div>
+                                    <br>
+                                    <div>List Maintainer</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            The Active Pool List
+                        </div>
+                        <div class="panel-body">
+                            <div class='row'>
+                                <div class='col-lg-6'>
+                                    <p>By voting one of those pools, they will reward you depending on the frequency, the number of votants, and the sharing percentage they credit you.</p>
+                                    <p>As many people asked on the Ryver for a tool to check on wheter or not a pool is active, you can check if you have been paid here. Simply enter your address here, and let the magic happen ;)</p>
+                                </div>
+                                <div class='col-lg-6'>
+                                    <b>Enter your address here:</b>
+                                    <form action="checkpool.html" method="get">
+                                        <div class="input-group custom-search-form">
+                                            <input type="text" name='username' class="form-control" placeholder="Voter Address">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                             <div class="panel-heading">
-                                Delegates List
+                                Pools List
                             </div>
                             <!-- /.panel-heading -->
                             <div id='spinner' class='panel-body'>
@@ -160,7 +211,7 @@
                                     <br><br>
                                     <img src='./spinner.gif' style=' display:block; margin:auto;'/>
                                     <br>
-                                    <span style='text-align: center !important; width: 100%; display:block;'>Loading data. Please vote <b>shift_tools</b>, to support my work and hosting this website !</span>
+                                    <span style='text-align: center !important; width: 100%; display:block;'>Loading data. Please vote <b>shift_tools</b>, to support my work and hosting this website, and vote <b>Vekexasia</b>, for maintaining this list!</span>
                                 </div>
                                 <div class="col-lg-3 col-md-6">
                                 </div>
@@ -171,25 +222,23 @@
                                     <table width="100%" class="table table-striped table-bordered table-hover display" id="dataTables-example">
                                         <thead>
                                             <tr>
-                                                <th>Username</th>
-                                                <th>Address</th>
-                                                <th>Vote</th>
-                                                <th>Produced Blocks</th>
-                                                <th>Missed Blocks</th>
-                                                <th>Rate</th>
                                                 <th>Rank</th>
-                                                <th class="sorting_desc">Balance</th>
+                                                <th>Delegate Name</th>
+                                                <th>Frequency</th>
+                                                <th>Sharing Percentage</th>
+                                                <th>Minimum Payout</th>
+                                                <th>Website</th>
+                                                <th>Note</th>
                                             </tr>
                                         </thead>
-                                        <tr ng-repeat="delegate in delegates">
-                                            <td class='username'>{{delegate.username}}</td>
-                                            <td>{{delegate.address}}</td>
-                                            <td>{{delegate.vote}}</td>
-                                            <td>{{delegate.producedblocks}}</td>
-                                            <td>{{delegate.missedblocks}}</td>
-                                            <td>{{delegate.rate}}</td>
-                                            <td>{{delegate.rank}}</td>
-                                            <td>{{delegate.balance}}</td>
+                                        <tr ng-repeat="pool in pools" ng-switch='isforgingdelegate(pool.delegate)'>
+                                            <td ng-switch-when='true'>{{getRank(pool.delegate)}}</td>
+                                            <td ng-switch-when='true' class='username'>{{pool.delegate}}</td>
+                                            <td ng-switch-when='true'>{{pool.payout.schedule}}</td>
+                                            <td ng-switch-when='true'>{{getSharingPercentage(pool.share)}}%</td>
+                                            <td ng-switch-when='true'>{{pool.payout.min}}</td>
+                                            <td ng-switch-when='true'><a href='{{pool.website}}'>{{pool.website}}</a></td>
+                                            <td ng-switch-when='true'><div ng-if="isnotvekexasia(pool.delegate)">{{pool.notes}}</div></td>
                                         </tr>
                                     </table>
                                 </div>

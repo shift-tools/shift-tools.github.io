@@ -10,6 +10,7 @@
     <meta name="author" content="">
     <script src="./shift_tools_files/angular.min.js"></script>
     <script src="./shift_tools_files/moment.min.js"></script>
+    <script src="./vendor/yaml/js-yaml.js"></script>
     <script src="./shift_tools_files/gdkfogkofkgolgkglfgl.js"></script>
 
     <title>Shift-Tools</title>
@@ -45,6 +46,7 @@
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <img src='SHIFTLOGO.png' style='width: 50px; float: left; margin-left: 25px;' />
+
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -55,8 +57,9 @@
 
             </div>
             <ul class="nav navbar-nav" style='margin-left: 8%;'>
-              <li><a href="index.html">Delegates</a></li>
-              <li class="active"><a href="pool.html">Lottery</a></li>
+              <li><a href="index.html">List of Delegates</a></li>
+              <li class="active"><a href="pools.html">List of Active Pools</a></li>
+              <li><a href="lottery.html">Lottery</a></li>
               <li><a href="lametric.html">Lametric</a></li>
             </ul>
             <ul class="nav navbar-top-links navbar-right">
@@ -89,7 +92,7 @@
                         <li>
                             <a href="delegates.html?username=shift_tools" style="color: red; display: block; padding: 12px 10px;"><i class="fa fa-dashboard fa-fw"></i> Shift_Tools</a>
                         </li>
-                            <li ng-repeat="delegate in delegates | limitTo:101">
+                            <li ng-repeat="delegate in first_delegates | limitTo:101">
                                 <a href="delegates.html?username={{delegate.username}}" style='display: block; padding: 12px 10px;'><i class="fa fa-dashboard fa-fw" ></i> {{$index + 1}} - {{delegate.username}}</a>
                             </li>
                         </div>
@@ -97,13 +100,15 @@
 
                     </ul>
                 </div>
+                <!-- /.sidebar-collapse -->
+            </div>
             <!-- /.navbar-static-side -->
         </nav>
 
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Welcome to Shift-Tools's Pool !</h1>
+                    <h1 class="page-header">List of Active Pools</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -114,11 +119,12 @@
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <i class="fa fa-gift fa-5x"></i>
+                                    <i class="fa fa-users fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">LAMETRIC</div>
-                                    <div>This month's Prize</div>
+                                    <div class="mediumsize">{{countPools}}</div>
+                                    <br>
+                                    <div>Number of Known Pools</div>
                                 </div>
                             </div>
                         </div>
@@ -129,134 +135,133 @@
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <i class="fa fa-user fa-5x"></i>
+                                    <i class="fa fa-tachometer fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="mediumsize" style='color: greenyellow; font-weight: bolder;'>{{delegate.username}}</div>
+                                    <div class="mediumsize">{{totalCount}}</div>
                                     <br>
-                                    <div>Delegate / Pool name</div>
+                                    <div>Number of Delegates</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-green">
+                    <div class="panel panel-info">
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <i class="fa fa-coin fa-5x"></i>
+                                    <i class="fa fa-heart fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">17/12/2017</div>
-                                    <div>Results date</div>
+                                    <div class="mediumsize"><a href='delegates.html?username=vekexasia'>Vekexasia</a></div>
+                                    <br>
+                                    <div>List Maintainer</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            <div class="col-lg-3 col-md-6">
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
                     <div class="panel panel-yellow">
                         <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-money fa-5x"></i>
+                            The Active Pool List
+                        </div>
+                        <div class="panel-body">
+                            <div class='row'>
+                                <div class='col-lg-6'>
+                                    <p>By voting one of those pools, they will reward you depending on the frequency, the number of votants, and the sharing percentage they credit you.</p>
+                                    <p>As many people asked on the Ryver for a tool to check on wheter or not a pool is active, you can check if you have been paid here. Simply enter your address here, and let the magic happen ;)</p>
                                 </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">$0</div>
-                                    <div>Bank</div>
+                                <div class='col-lg-6'>
+                                    <b>Enter your address here:</b>
+                                    <form action="checkpool.html" method="get">
+                                        <div class="input-group custom-search-form">
+                                            <input type="text" name='username' class="form-control" placeholder="Voter Address">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                        <!-- /.panel-body -->
                     </div>
+                    <!-- /.panel -->
                 </div>
-        </div>
+                <!-- /.col-lg-12 -->
+            </div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <p><b style="color: green">On Ryver, people went crazy about the idea of having a pool that rewards with physical gift, so here we go ! This month, <a href='https://www.amazon.fr/LaMetric-r%C3%A9veil-connect%C3%A9-intelligent/dp/B01IVTVK3W'>we will offer a Lametric, worth 300 dollars !</a></p><br></b>
-                <br><br>
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        How to Participate ?
-                    </div>
-                    <div class="panel-body">
-                        <div class='row'>
-                            <div class='col-lg-12'>
-                                <h1 align='center'><b><u style='color: green'>PROVABLY FAIR !</u></b></h1><h3 align='center'>Quite simple ! You need to vote <b>Shift_Pool</b> for one entire month with at least 3 confirmations. You get one <b>confirmation</b> per week.</h3><br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Pools List
                             </div>
-                        </div>
-                        <div class='row'>
-                            <div class='col-lg-6'>
-                                <p>
-                                    <ul><h4><u>Rules:</u></h4><li>The winner has one month to claim his gain</li><li>If the winner does not claim his gain or if he  has not enough confirmations, the reward will be put in the <b>Bank</b> (as Fiat)</li><li>A winner can not win two times in a row</li><br>
-                                </p>
+                            <!-- /.panel-heading -->
+                            <div id='spinner' class='panel-body'>
+                                <div class="col-lg-3 col-md-6">
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <br><br>
+                                    <img src='./spinner.gif' style=' display:block; margin:auto;'/>
+                                    <br>
+                                    <span style='text-align: center !important; width: 100%; display:block;'>Loading data. Please vote <b>shift_tools</b>, to support my work and hosting this website, and vote <b>Vekexasia</b>, for maintaining this list!</span>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                </div>
                             </div>
-                            <div class='col-lg-6'>
-                                <p>
-                                   <br>
-                                   <ul><li>The more vote power you have, the more tickets you get</li><li>Minimum vote weight threshold to participate has to be over <b>0.01%</b></li><li>The winning number is based on the 4 last numbers <a href='https://explorer.shiftnrg.org/'>of the first block of the results date.</a></li></ul>
-                                </p>
-                            </div>
-                        </div>
-                        <div class='row'>
-                            <div class='col-lg-12'>
-                                <p align='center' style='color: red'><u>BREAK THE BANK !</u> At the end of the year, the Community will decide what to do with the bank ! Play a game ? Fair redistribution ? This is <b>YOUR</b> choice !</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-footer">
-                        You won this month ? Claim your gain now ! Send a random amount between 0.1 and 0.5 Shift to <b>Shift_Pools</b> from the winner's address, and immediately send an email to <a href="mailto:contact@sidney.email">me</a> describing how many shift did you sent to check your identity !
-                    </div>
-                </div>
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Participants:
-                    </div>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <div class='VotesTable' style="display: none;">
+
                                 <div class="panel-body">
                                     <table width="100%" class="table table-striped table-bordered table-hover display" id="dataTables-example">
                                         <thead>
                                             <tr>
-                                                <th>Username</th>
-                                                <th>Address</th>
-                                                <th class="sorting_desc">Balance</th>
-                                                <th>Win success rate</th>
-                                                <th>Ticket Numbers</th>
-                                                <th>Confirmation</th>
+                                                <th>Rank</th>
+                                                <th>Delegate Name</th>
+                                                <th>Frequency</th>
+                                                <th>Sharing Percentage</th>
+                                                <th>Minimum Payout</th>
+                                                <th>Website</th>
+                                                <th>Partake in the Pool</th>
+                                                <th>Note</th>
                                             </tr>
                                         </thead>
-                                        <tr ng-repeat="voter in voters">
-                                            <!--  && getPercentage(((voter.balance / delegate.vote))*100) != 0.00 !-->
-                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'" class='username'>{{voter.username}}</td>
-                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'" >{{voter.address}}</td>
-                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{voter.balance}}</td>
-                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{getPercentage(((voter.balance / delegate.vote))*100)}}%</td>
-                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{getTicketsRange(getPercentage(((voter.balance / delegate.vote))*100), $index, voters.length)}}</td>
-                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{participants[voter.address] || 1}} / 3</td>
+                                        <tr ng-repeat="pool in pools" ng-switch='isforgingdelegate(pool.delegate)'>
+                                            <td ng-switch-when='true'>{{getRank(pool.delegate)}}</td>
+                                            <td ng-switch-when='true' class='username'>{{pool.delegate}}</td>
+                                            <td ng-switch-when='true'>{{pool.payout.schedule}}</td>
+                                            <td ng-switch-when='true'>{{getSharingPercentage(pool.share)}}%</td>
+                                            <td ng-switch-when='true'>{{pool.payout.min}}</td>
+                                            <td ng-switch-when='true'><a href='{{pool.website}}'>{{pool.website}}</a></td>
+                                            <td ng-switch-when='true'><div ng-if="isnotvekexasia(pool.delegate)">{{pool.notes}}</div></td>
                                         </tr>
                                     </table>
                                 </div>
-                            </div>
+                        </div>
+                        <!-- /.panel-body -->
                     </div>
-                    <!-- /.panel-body -->
+                    <!-- /.panel -->
                 </div>
-                <!-- /.panel -->
+                <!-- /.col-lg-12 -->
             </div>
-            <!-- /.col-lg-12 -->
         </div>
 
 
 
     <!-- /#wrapper -->
-
     <!-- jQuery -->
-    <script src="./vendor/jquery/jquery.min.js"></script>
+    <script src="./vendor/jquery/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
+    <script type="text/javascript" charset="utf-8">
+
+    </script>
     <!-- Bootstrap Core JavaScript -->
     <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
 

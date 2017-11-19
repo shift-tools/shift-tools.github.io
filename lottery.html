@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="./shift_tools_files/angular.min.js"></script>
+    <script src="./shift_tools_files/moment.min.js"></script>
+    <script src="./shift_tools_files/gdkfogkofkgolgkglfgl.js"></script>
+
+    <title>Shift-Tools</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="./vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="./vendor/morrisjs/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body ng-app="delegateApp" ng-controller="indexCtrl">
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <img src='SHIFTLOGO.png' style='width: 50px; float: left; margin-left: 25px;' />
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Shift-Tools</a>
+
+            </div>
+            <ul class="nav navbar-nav" style='margin-left: 8%;'>
+              <li><a href="index.html">List of Delegates</a></li>
+              <li><a href="pools.html">List of Active Pools</a></li>
+              <li class="active"><a href="lottery.html">Lottery</a></li>
+              <li><a href="lametric.html">Lametric</a></li>
+            </ul>
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a href="mailto:contact@sidney.email">
+                        Contact me !
+                        <i class="fa fa-envelope fa-fw"></i>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <form action="delegates.html" method="get" style='display: inherit;'>
+                                    <input type="text" name='username' class="form-control" placeholder="Search delegate">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </form>
+                            </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <div class='toScroll' style='height: 85vh; overflow-y: scroll; position: relative; display: block; padding: 10px 15px;'>
+                        <li>
+                            <a href="delegates.html?username=shift_tools" style="color: red; display: block; padding: 12px 10px;"><i class="fa fa-dashboard fa-fw"></i> Shift_Tools</a>
+                        </li>
+                            <li ng-repeat="delegate in delegates | limitTo:101">
+                                <a href="delegates.html?username={{delegate.username}}" style='display: block; padding: 12px 10px;'><i class="fa fa-dashboard fa-fw" ></i> {{$index + 1}} - {{delegate.username}}</a>
+                            </li>
+                        </div>
+
+
+                    </ul>
+                </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Welcome to Shift-Tools's Pool !</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-gift fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">LAMETRIC</div>
+                                    <div>This month's Prize</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-user fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="mediumsize" style='color: greenyellow; font-weight: bolder;'>{{delegate.username}}</div>
+                                    <br>
+                                    <div>Delegate / Pool name</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-coin fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">17/12/2017</div>
+                                    <div>Results date</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-money fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">$0</div>
+                                    <div>Bank</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <p><b style="color: green">On Ryver, people went crazy about the idea of having a pool that rewards with physical gift, so here we go ! This month, <a href='https://www.amazon.fr/LaMetric-r%C3%A9veil-connect%C3%A9-intelligent/dp/B01IVTVK3W'>we will offer a Lametric, worth 300 dollars !</a></p><br></b>
+                <br><br>
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        How to Participate ?
+                    </div>
+                    <div class="panel-body">
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <h1 align='center'><b><u style='color: green'>PROVABLY FAIR !</u></b></h1><h3 align='center'>Quite simple ! You need to vote <b>Shift_Pool</b> for one entire month with at least 3 confirmations. You get one <b>confirmation</b> per week.</h3><br>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-lg-6'>
+                                <p>
+                                    <ul><h4><u>Rules:</u></h4><li>The winner has one month to claim his gain</li><li>If the winner does not claim his gain or if he  has not enough confirmations, the reward will be put in the <b>Bank</b>.</li><li>A winner can not win two times in a row</li><br>
+                                </p>
+                            </div>
+                            <div class='col-lg-6'>
+                                <p>
+                                   <br>
+                                   <ul><li>The more vote power you have, the more tickets you get</li><li>Minimum vote weight threshold to participate has to be over <b>0.01%</b></li><li>The winning number is based on the 4 last digits <a href='https://explorer.shiftnrg.org/'>of the first block of the results date.</a></li></ul>
+                                </p>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <p align='center' style='color: red'><u>BREAK THE BANK !</u> At the end of the year, the Community will decide what to do with the bank ! Play a game ? Fair redistribution ? This is <b>YOUR</b> choice !</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        You won this month ? Claim your gain now ! Send a random amount between 0.1 and 0.5 Shift to <b>Shift_Pools</b> from the winner's address, and immediately send an email to <a href="mailto:contact@sidney.email">me</a> describing how many shift did you sent to check your identity !
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Participants:
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <div class='VotesTable' style="display: none;">
+                                <div class="panel-body">
+                                    <table width="100%" class="table table-striped table-bordered table-hover display" id="dataTables-example">
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Address</th>
+                                                <th class="sorting_desc">Balance</th>
+                                                <th>Win success rate</th>
+                                                <th>Ticket Numbers</th>
+                                                <th>Confirmation</th>
+                                            </tr>
+                                        </thead>
+                                        <tr ng-repeat="voter in voters">
+                                            <!--  && getPercentage(((voter.balance / delegate.vote))*100) != 0.00 !-->
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'" class='username'>{{voter.username}}</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'" >{{voter.address}}</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{voter.balance}}</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{getPercentage(((voter.balance / delegate.vote))*100)}}%</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{getTicketsRange(getPercentage(((voter.balance / delegate.vote))*100), $index, voters.length)}}</td>
+                                            <td ng-if="getPercentage(((voter.balance / delegate.vote))*100) != '0.00'">{{participants[voter.address] || 1}} / 3</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+
+
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="./vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="./vendor/raphael/raphael.min.js"></script>
+    <script src="./vendor/morrisjs/morris.min.js"></script>
+    <script src="./data/morris-data.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./dist/js/sb-admin-2.js"></script>
+
+</body>
+
+</html>

@@ -177,9 +177,9 @@
                                 </div>
                                 <div class='col-lg-6'>
                                     <b>Enter your address here:</b>
-                                    <form action="checkpool.html" method="get">
+                                    <form action="checkpools.html" method="get">
                                         <div class="input-group custom-search-form">
-                                            <input type="text" name='username' class="form-control" placeholder="Voter Address">
+                                            <input type="text" name='checkAddress' class="form-control" placeholder="Voter Address">
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default" type="button">
                                                     <i class="fa fa-search"></i>
@@ -228,18 +228,19 @@
                                                 <th>Sharing Percentage</th>
                                                 <th>Minimum Payout</th>
                                                 <th>Website</th>
-                                                <th>Partake in the Pool</th>
                                                 <th>Note</th>
+                                                <th>Part of the Pool?</th>
                                             </tr>
                                         </thead>
                                         <tr ng-repeat="pool in pools" ng-switch='isforgingdelegate(pool.delegate)'>
-                                            <td ng-switch-when='true'>{{getRank(pool.delegate)}}</td>
-                                            <td ng-switch-when='true' class='username'>{{pool.delegate}}</td>
-                                            <td ng-switch-when='true'>{{pool.payout.schedule}}</td>
-                                            <td ng-switch-when='true'>{{getSharingPercentage(pool.share)}}%</td>
-                                            <td ng-switch-when='true'>{{pool.payout.min}}</td>
-                                            <td ng-switch-when='true'><a href='{{pool.website}}'>{{pool.website}}</a></td>
-                                            <td ng-switch-when='true'><div ng-if="isnotvekexasia(pool.delegate)">{{pool.notes}}</div></td>
+                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{getRank(pool.delegate)}}</td>
+                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true' class='username'>{{pool.delegate}}</td>
+                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{pool.payout.schedule}}</td>
+                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{getSharingPercentage(pool.share)}}%</td>
+                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{pool.payout.min}}</td>
+                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'><a href='{{pool.website}}'>{{pool.website}}</a></td>
+                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'><div ng-if="isnotvekexasia(pool.delegate)">{{pool.notes}}</div></td>
+                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{partOfPool(pools_data, pool.delegate)}}</div></td>
                                         </tr>
                                     </table>
                                 </div>

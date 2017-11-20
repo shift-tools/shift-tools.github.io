@@ -33,11 +33,17 @@ app.controller('indexCtrl', function($scope, $http) {
     ticketRange                   = {};
     previous_ticket_number        = -1;
     first_delegates               = [];
+    pools = null;
     if (window.location.search.substr(10) == '') {
         var user = 'shift_tools';
     }
     else {
-        var user = window.location.search.substr(10);
+        if (window.location.href.indexOf("/checkpools") > -1) {
+            var user = 'shift_tools';
+        }        
+        else {
+            var user = window.location.search.substr(10);
+        }
     }
 
     // if route is index
@@ -61,8 +67,52 @@ app.controller('indexCtrl', function($scope, $http) {
 
 
     // if route is delegates show
-    if ((window.location.href.indexOf("/delegates") > -1) || (window.location.href.indexOf("/lottery") > -1) || (window.location.href.indexOf("/pools") > -1)) {
-        if (window.location.href.indexOf("/pools") > -1) {
+    if ((window.location.href.indexOf("/delegates") > -1) || (window.location.href.indexOf("/lottery") > -1) || (window.location.href.indexOf("/pools") > -1) || (window.location.href.indexOf("/checkpools") > -1)) {
+        if (window.location.href.indexOf("/pools") > -1 || (window.location.href.indexOf("/checkpools") > -1)) {
+            checkAddress = window.location.search.substr(14);
+
+            var do_http_calls = function(pool) {
+                $http.get ('https://wallet.shiftnrg.org/api/delegates/get?username=' + pool.delegate).then (function (res) {
+
+                    $http.get('https://wallet.shiftnrg.org/api/delegates/voters?publicKey=' + res.data.delegate.publicKey).then (function (res) {
+                        for (var i = 0; i < res.data.accounts.length; i++){
+                            var account = res.data.accounts[i];
+                            if (checkAddress == account.address) {
+                                $scope.pools_data.push(pool.delegate);
+                            }
+                        }
+                    });
+                });
+            }
+
+            $http.get('https://raw.githubusercontent.com/vekexasia/dpos-tools-data/master/shift.yml').then (function (res) {
+
+                $scope.pools = YAML.parse(res.data).pools;
+                $scope.countPools = YAML.parse(res.data).pools.length;
+
+                if(window.location.href.indexOf("/checkpools") > -1) {
+                    for (var i = 0; i < $scope.pools.length; i++){
+                        var pool          = $scope.pools[i];
+
+                        $scope.pools_data = [];
+
+                        do_http_calls(pool);
+
+                    }
+                };
+            });
+
+            
+
+            $scope.partOfPool = function(pools_data, pool_name) {
+                for (var i = 0; i < pools_data.length; i++) {
+                    if (pools_data[i] == pool_name) {
+                       return 'yes';
+                    }
+                    else {
+                    }
+                }
+            }
             $scope.isnotvekexasia = function(delegate_name) {
                if (delegate_name != 'vekexasia') {
                    return true;
@@ -91,16 +141,19 @@ app.controller('indexCtrl', function($scope, $http) {
                 }
                return false;
             }
+            $scope.getAddress = function(delegate_name) {
+                for (var i = 0; i < first_delegates.length; i++){
+                    var delegate = first_delegates[i];
+                    if (delegate.username == delegate_name) {
+                        return delegate.address;
+                    }
+
+                }
+               return false;
+            }
             $scope.getSharingPercentage = function(percentage) {
                return percentage;
             }
-
-            $http.get('https://raw.githubusercontent.com/vekexasia/dpos-tools-data/master/shift.yml').then (function (res) {
-                window.hey = res;
-
-                $scope.pools = YAML.parse(res.data).pools;
-                $scope.countPools = YAML.parse(res.data).pools.length;
-            });
         }
 
     	if (window.location.href.indexOf("/lottery") > -1) {
@@ -151,7 +204,7 @@ app.controller('indexCtrl', function($scope, $http) {
             $http.get('https://wallet.shiftnrg.org/api/delegates/voters?publicKey=' + res.data.delegate.publicKey).then (function (res) {
                $scope.voters = res.data.accounts;
 
-                if (!(window.location.href.indexOf("/pools") > -1)) {
+                if (!(window.location.href.indexOf("/pools") > -1) && !(window.location.href.indexOf("/checkpools") > -1)) {
                     parseTable(2, 'desc', 10);
                 }
                 else {

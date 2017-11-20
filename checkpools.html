@@ -80,7 +80,7 @@
                                 <form action="delegates.html" method="get" style='display: inherit;'>
                                     <input type="text" name='username' class="form-control" placeholder="Search delegate">
                                     <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
+                                    <button class="btn btn-default" type="submit">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </form>
@@ -224,23 +224,19 @@
                                             <tr>
                                                 <th>Rank</th>
                                                 <th>Delegate Name</th>
-                                                <th>Frequency</th>
-                                                <th>Sharing Percentage</th>
-                                                <th>Minimum Payout</th>
-                                                <th>Website</th>
-                                                <th>Note</th>
                                                 <th>Part of the Pool?</th>
+                                                <th>Last Transaction Link</th>
+                                                <th>Last Payout time</th>
+                                                <th>Last Payout Amount</th>
                                             </tr>
                                         </thead>
                                         <tr ng-repeat="pool in pools" ng-switch='isforgingdelegate(pool.delegate)'>
-                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{getRank(pool.delegate)}}</td>
-                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true' class='username'>{{pool.delegate}}</td>
-                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{pool.payout.schedule}}</td>
-                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{getSharingPercentage(pool.share)}}%</td>
-                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{pool.payout.min}}</td>
-                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'><a href='{{pool.website}}'>{{pool.website}}</a></td>
-                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'><div ng-if="isnotvekexasia(pool.delegate)">{{pool.notes}}</div></td>
-                                            <td ng-style="{ 'background-color' : (partOfPool(pools_data, pool.delegate) == 'yes') ? 'chartreuse' : 'none' }" ng-switch-when='true'>{{partOfPool(pools_data, pool.delegate)}}</div></td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }" ng-switch-when='true'>{{getRank(pool.delegate)}}</td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }" ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }"" ng-switch-when='true' class='username'>{{pool.delegate}}</td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }" ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }"" ng-switch-when='true'>{{partOfPool(pools_data, pool.delegate)}}</td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }" ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }"" ng-switch-when='true'><a href="{{(partOfPool(pools_data, pool.delegate) == 'yes') ? explorer_link(getAddress(pool.delegate)) : ''}}">{{(is_shift_tools(pool.delegate) && partOfPool(pools_data, pool.delegate) != 'yes')? 'Please vote for me, shift_tools!' :(partOfPool(pools_data, pool.delegate) == 'yes') ? explorer_link(getAddress(pool.delegate)) : ''}}</a></td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }" ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }"" ng-switch-when='true'>{{is_shift_tools(pool.delegate) ? '' : (partOfPool(pools_data, pool.delegate) == 'yes') ? is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) : ''}}</td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }" ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) ? 'yellow' : (partOfPool(pools_data, pool.delegate) == 'yes') ? (   (is_recent_transaction(transaction_timestamp(getAddress(pool.delegate)), transaction_amount(getAddress(pool.delegate))) == 'Recently') ? 'chartreuse' : '#ef8484'     ) : 'none') }"" ng-switch-when='true'>{{is_shift_tools(pool.delegate) ? 'Beyond Understanding' : (partOfPool(pools_data, pool.delegate) == 'yes') ? transaction_amount(getAddress(pool.delegate)) : ''}}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -273,6 +269,7 @@
     <script src="./vendor/raphael/raphael.min.js"></script>
     <script src="./vendor/morrisjs/morris.min.js"></script>
     <script src="./data/morris-data.js"></script>
+    <script src="./vendor/yaml/jquery.timeago.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="./dist/js/sb-admin-2.js"></script>

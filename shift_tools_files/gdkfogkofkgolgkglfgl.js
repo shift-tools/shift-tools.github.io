@@ -33,6 +33,9 @@ app.controller('indexCtrl', function($scope, $http) {
     ticketRange                   = {};
     previous_ticket_number        = -1;
     first_delegates               = [];
+    $scope.transaction_list       = {};
+    $scope.last_transaction_timestamp = 0;
+
     pools = null;
     if (window.location.search.substr(10) == '') {
         var user = 'shift_tools';
@@ -99,10 +102,51 @@ app.controller('indexCtrl', function($scope, $http) {
                         do_http_calls(pool);
 
                     }
+                
+
+                    $http.get('https://wallet.shiftnrg.org/api/transactions?limit=200&recipientId='+checkAddress).then (function (res) {
+                        window.eed = res;
+                        for (var i = 0; i < res.data.transactions.length; i++) {
+                            transaction = res.data.transactions[i];
+
+                            if(!($scope.transaction_list[transaction.senderId])) {
+                                $scope.transaction_list[transaction.senderId] = [transaction.id, transaction.timestamp, transaction.amount];
+                            }
+                        };
+                    });
+            
                 };
             });
 
+            $http.get('https://wallet.shiftnrg.org/api/transactions?limit=1&orderBy=timestamp:desc').then (function (res) {
+                $scope.last_transaction_timestamp=res.data.transactions[0].timestamp;
+            });
             
+            $scope.is_shift_tools = function(pool_name) {
+                if(pool_name == 'shift_tools') {
+                    return true;
+                }
+            }
+
+            $scope.is_vekexasia = function(pool_name) {
+                if(pool_name == 'vekexasia') {
+                    return true;
+                }
+            }
+
+            $scope.is_recent_transaction = function(timestamp, amount) {
+                console.log(timestamp + '-' + $scope.last_transaction_timestamp);
+                if(amount===undefined){
+                    return 'Never !';
+                }
+                if(timestamp>parseInt($scope.last_transaction_timestamp-1203305)) {
+                    return 'Recently';
+                }
+                else {
+                    return 'More than 10 days ago !'
+                }
+
+            }
 
             $scope.partOfPool = function(pools_data, pool_name) {
                 for (var i = 0; i < pools_data.length; i++) {
@@ -113,6 +157,22 @@ app.controller('indexCtrl', function($scope, $http) {
                     }
                 }
             }
+            $scope.explorer_link = function(pool_address) {
+                if ($scope.transaction_list[pool_address]) {
+                    return 'https://explorer.shiftnrg.org/tx/' + $scope.transaction_list[pool_address][0];                    
+                }
+            }
+            $scope.transaction_timestamp = function(pool_address) {
+                if ($scope.transaction_list[pool_address]) {
+                    return ($scope.transaction_list[pool_address][1]);
+                }
+            }
+            $scope.transaction_amount = function(pool_address) {
+                if ($scope.transaction_list[pool_address]) {
+                    return $scope.transaction_list[pool_address][2];
+                }
+            }
+
             $scope.isnotvekexasia = function(delegate_name) {
                if (delegate_name != 'vekexasia') {
                    return true;

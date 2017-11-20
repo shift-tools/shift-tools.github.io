@@ -181,7 +181,7 @@
                                         <div class="input-group custom-search-form">
                                             <input type="text" name='checkAddress' class="form-control" placeholder="Voter Address">
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button">
+                                                <button class="btn btn-default" type="submit">
                                                     <i class="fa fa-search"></i>
                                                 </button>
                                             </span>
@@ -232,13 +232,13 @@
                                             </tr>
                                         </thead>
                                         <tr ng-repeat="pool in pools" ng-switch='isforgingdelegate(pool.delegate)'>
-                                            <td ng-switch-when='true'>{{getRank(pool.delegate)}}</td>
-                                            <td ng-switch-when='true' class='username'>{{pool.delegate}}</td>
-                                            <td ng-switch-when='true'>{{pool.payout.schedule}}</td>
-                                            <td ng-switch-when='true'>{{getSharingPercentage(pool.share)}}%</td>
-                                            <td ng-switch-when='true'>{{pool.payout.min}}</td>
-                                            <td ng-switch-when='true'><a href='{{pool.website}}'>{{pool.website}}</a></td>
-                                            <td ng-switch-when='true'><div ng-if="isnotvekexasia(pool.delegate)">{{pool.notes}}</div></td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) || is_vekexasia(pool.delegate) )? 'chartreuse': 'none' }" ng-switch-when='true'>{{getRank(pool.delegate)}}</td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) || is_vekexasia(pool.delegate) )? 'chartreuse': 'none' }" ng-switch-when='true' ng-switch-when='true' class='username'>{{pool.delegate}}</td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) || is_vekexasia(pool.delegate) )? 'chartreuse': 'none' }" ng-switch-when='true' ng-switch-when='true'>{{pool.payout.schedule}}</td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) || is_vekexasia(pool.delegate) )? 'chartreuse': 'none' }" ng-switch-when='true' ng-switch-when='true'>{{getSharingPercentage(pool.share)}}%</td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) || is_vekexasia(pool.delegate) )? 'chartreuse': 'none' }" ng-switch-when='true' ng-switch-when='true'>{{pool.payout.min}}</td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) || is_vekexasia(pool.delegate) )? 'chartreuse': 'none' }" ng-switch-when='true' ng-switch-when='true'><a href='{{pool.website}}'>{{pool.website}}</a></td>
+                                            <td ng-style="{ 'background-color' : ( is_shift_tools(pool.delegate) || is_vekexasia(pool.delegate) )? 'chartreuse': 'none' }" ng-switch-when='true' ng-switch-when='true'><div ng-if="isnotvekexasia(pool.delegate)">{{pool.notes}}</div></td>
                                         </tr>
                                     </table>
                                 </div>

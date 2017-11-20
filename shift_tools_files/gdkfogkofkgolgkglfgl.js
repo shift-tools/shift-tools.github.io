@@ -104,7 +104,7 @@ app.controller('indexCtrl', function($scope, $http) {
                     }
                 
 
-                    $http.get('https://wallet.shiftnrg.org/api/transactions?limit=200&recipientId='+checkAddress).then (function (res) {
+                    $http.get('https://wallet.shiftnrg.org/api/transactions?orderBy=timestamp:desc&limit=200&recipientId='+checkAddress).then (function (res) {
                         window.eed = res;
                         for (var i = 0; i < res.data.transactions.length; i++) {
                             transaction = res.data.transactions[i];

@@ -104,7 +104,7 @@ app.controller('indexCtrl', function($scope, $http) {
                     }
                 
 
-                    $http.get('https://wallet.shiftnrg.org/api/transactions?orderBy=timestamp:desc&limit=200&recipientId='+checkAddress).then (function (res) {
+                    $http.get('https://wallet.shiftnrg.org/api/transactions?orderBy=timestamp:desc&limit=250&recipientId='+checkAddress).then (function (res) {
                         window.eed = res;
                         for (var i = 0; i < res.data.transactions.length; i++) {
                             transaction = res.data.transactions[i];
@@ -121,7 +121,7 @@ app.controller('indexCtrl', function($scope, $http) {
             $http.get('https://wallet.shiftnrg.org/api/transactions?limit=1&orderBy=timestamp:desc').then (function (res) {
                 $scope.last_transaction_timestamp=res.data.transactions[0].timestamp;
             });
-            
+
             $scope.is_shift_tools = function(pool_name) {
                 if(pool_name == 'shift_tools') {
                     return true;
@@ -161,6 +161,9 @@ app.controller('indexCtrl', function($scope, $http) {
                 if ($scope.transaction_list[pool_address]) {
                     return 'https://explorer.shiftnrg.org/tx/' + $scope.transaction_list[pool_address][0];                    
                 }
+                else {
+                    return '';
+                }
             }
             $scope.transaction_timestamp = function(pool_address) {
                 if ($scope.transaction_list[pool_address]) {
@@ -191,6 +194,16 @@ app.controller('indexCtrl', function($scope, $http) {
                 }
                return false;
             }
+            $scope.isforgingdelegatecheck = function(delegate_name) {
+                for (var i = 0; i < first_delegates.length; i++){
+                    var delegate = first_delegates[i];
+                    if ((delegate.username == delegate_name) && ((delegate.username != 'vekexasia'))) {
+                        return true;
+                    }
+
+                }
+               return false;
+            }
             $scope.getRank = function(delegate_name) {
                 for (var i = 0; i < first_delegates.length; i++){
                     var delegate = first_delegates[i];
@@ -213,6 +226,58 @@ app.controller('indexCtrl', function($scope, $http) {
             }
             $scope.getSharingPercentage = function(percentage) {
                return percentage;
+            }
+
+            $scope.pool_name_color = function(pools_data, pool_name) {
+                if (pool_name == 'vekexasia'){
+                    return 'yellow';
+                }
+                else if(pool_name == 'shift_tools') {
+                    return 'yellow';
+                }
+                else if ($scope.partOfPool(pools_data, pool_name) == 'yes') {
+                    if ($scope.is_recent_transaction($scope.transaction_timestamp($scope.getAddress(pool_name)), $scope.transaction_amount($scope.getAddress(pool_name))) == 'Recently') {
+                        return 'chartreuse';
+                    }
+                    else if (pool_name == 'saluki'){
+                        return 'yellow';
+                    }
+                    else if (pool_name == 'yondz'){
+                        return 'yellow';
+                    }
+                    else {
+                        return '#ef8484';
+                    }
+                }
+                else {
+                    if(pool_name == 'shift_tools') {
+                        return 'yellow';
+                    }
+                    else {
+                        return 'none';
+                    }
+                }
+            }
+            $scope.last_transaction_comment = function(pools_data, pool_name) {
+                if($scope.partOfPool(pools_data, pool_name) == 'yes') {
+                    if(pool_name == 'shift_tools') {
+                        return 'The awesome creator of Shift_Tools, and of the Active Pool List. ';
+                    }
+                    else if (pool_name == 'saluki'){
+                        return 'Saluki gives half of his earnings to the Shift Team !';
+                    }
+                    else if ((pool_name == 'yondz') && ($scope.explorer_link($scope.getAddress(pool_name)) == '')){
+                        return 'Yondz organizes a lottery and gives some of his earnings to the team. Visit his website for more info.';
+                    }
+                    else {
+                        return $scope.explorer_link($scope.getAddress(pool_name));
+                    }
+                }
+                else {
+                    if(pool_name == 'shift_tools') {
+                        return "You haven't voted for me yet ! Help Shift Tools, vote Shift_Tools ^_^";
+                    }
+                }
             }
         }
 

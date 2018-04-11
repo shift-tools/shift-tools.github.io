@@ -27,7 +27,7 @@ function parseTable(order, ascdesc, maxItem, countdown) {
 
 function next_roll() {
     var currentTime = new Date()
-    var month = currentTime.getMonth() + 1
+    var month = currentTime.getMonth() + 2
     var year = currentTime.getFullYear()
     date = (1 + "/" + month + "/" + year)
 

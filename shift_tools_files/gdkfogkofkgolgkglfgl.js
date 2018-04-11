@@ -1,6 +1,6 @@
 var app = angular.module('delegateApp', []);
 
-function parseTable(order, ascdesc, maxItem) {
+function parseTable(order, ascdesc, maxItem, countdown) {
     setTimeout(function () {
      $(".username").each(function(index, item) {
         value = $(item).text();
@@ -21,9 +21,30 @@ function parseTable(order, ascdesc, maxItem) {
                 }
             }
         );    
-    }, 3000);
+    }, countdown);
 }
 
+
+function next_roll() {
+    var currentTime = new Date()
+    var month = currentTime.getMonth() + 1
+    var year = currentTime.getFullYear()
+    date = (1 + "/" + month + "/" + year)
+
+    return date;
+}
+
+function show_table() {
+    if (window.location.href.indexOf("/proofofhodl") > -1) {
+        parseTable(7, 'desc', 101, 5000);
+    }
+    else if (((window.location.href.indexOf("/pools") > -1) || (window.location.href.indexOf("/checkpools") > -1))) {
+        parseTable(0, 'asc', 101, 5000);
+    }
+    else {
+        parseTable(2, 'desc', 10, 3000);
+    }
+}
 
 app.controller('indexCtrl', function($scope, $http) {
     $scope.accounts 			  = [];
@@ -33,6 +54,7 @@ app.controller('indexCtrl', function($scope, $http) {
     ticketRange                   = {};
     previous_ticket_number        = -1;
     first_delegates               = [];
+    pools_balance                 = [];
     $scope.transaction_list       = {};
     $scope.last_transaction_timestamp = 0;
 
@@ -49,24 +71,132 @@ app.controller('indexCtrl', function($scope, $http) {
         }
     }
 
-    // if route is index
-    $http.get('https://wallet.shiftnrg.org/api/delegates').then (function (res) {
-        $scope.first_delegates = res.data.delegates;
-        $scope.delegates = res.data.delegates;
-        $scope.totalCount = res.data.totalCount;
-        first_delegates = $scope.first_delegates;
-        if ((window.location.href.split('/').pop() === "") || (window.location.href.split('/').pop() === "index.html") ) {
-            setTimeout(function () {
-                parseTable(6, 'asc', 10);
-            }, 4000);
+    function delegates_show() {
+        $http.get('https://wallet.shiftnrg.org/api/delegates').then (function (res) {
+            $scope.first_delegates = res.data.delegates;
+            $scope.delegates = res.data.delegates;
+            $scope.totalCount = res.data.totalCount;
+            $scope.nextRoll = next_roll();
+            $scope.minted_shift = function(blocks) {
+                return parseInt(blocks*1.1);
+            };
 
-            const loop = [...Array(8)].map((_, i) => {
-              $http.get('https://wallet.shiftnrg.org/api/delegates?offset='+parseInt(i+1)+'01').then (function (res) {
-                $scope.delegates = res.data.delegates.concat($scope.delegates);
-              });
-            });
-        }
-    });
+            first_delegates = $scope.first_delegates;
+            if ((window.location.href.split('/').pop() === "") || (window.location.href.split('/').pop() === "index.html") ) {
+                setTimeout(function () {
+                    parseTable(6, 'asc', 10);
+                }, 4000);
+
+                const loop = [...Array(8)].map((_, i) => {
+                  $http.get('https://wallet.shiftnrg.org/api/delegates?offset='+parseInt(i+1)+'01').then (function (res) {
+                    $scope.delegates = res.data.delegates.concat($scope.delegates);
+                  });
+                });
+            }
+
+            // if route is proof of hodl
+            
+            if (window.location.href.indexOf("/proofofhodl") > -1) {
+                show_table();
+
+                $http.get('https://raw.githubusercontent.com/vekexasia/dpos-tools-data/master/shift.yml').then (function (res) {
+                    $scope.pools = YAML.parse(res.data).pools;
+                    $scope.countPools = YAML.parse(res.data).pools.length;
+
+                    for (var i = 0; i < $scope.delegates.length; i++) {
+                        address = $scope.delegates[i].address;
+                        $http.get ('https://wallet.shiftnrg.org/api/accounts/getBalance?address=' + address).then (function (res) {
+                            pools_balance.push([res.config.url.split('=')[1], res.data.balance]);
+
+                            $scope.IsaPool = function(pools_data, pool_name) {
+                                for (var i = 0; i < pools_data.length; i++) {
+                                    if (pools_data[i].delegate == pool_name) {
+                                       return 'yes';
+                                    }
+                                    else {
+                                    }
+                                }
+                            }
+
+                            $scope.poolPercentage = function(pools_data, pool_name) {
+                                for (var i = 0; i < pools_data.length; i++) {
+                                    if (pools_data[i].delegate == pool_name) {
+                                       return pools_data[i].share + '%';
+                                    }
+                                }
+                            }
+
+                            $scope.currentBalance = function(pools_data, address, pool_name) {
+                                for (var i = 0; i < pools_balance.length; i++) {
+                                    if (pools_balance[i][0] == address) {
+                                       return parseInt(pools_balance[i][1]*0.00000001);
+                                    }
+                                }
+                            }
+
+                            $scope.ishodling = function(pools_data, address, pool_name, minted_shifts) {
+
+                                for (var i = 0; i < pools_balance.length; i++) {
+                                    if (pools_balance[i][0] == address) {
+                                       currentBalance = parseInt(pools_balance[i][1]*0.00000001);
+                                    }
+                                }
+
+                                poolPercentage = 0;
+                                for (var i = 0; i < pools_data.length; i++) {
+                                    if (pools_data[i].delegate == pool_name) {
+                                       poolPercentage = pools_data[i].share;
+                                    }
+                                    else {
+                                        if (!(poolPercentage != 0)) {
+                                          poolPercentage = 0;  
+                                        }    
+                                    }
+                                }
+
+                                return Math.round(parseFloat(((currentBalance*((poolPercentage/100)+1))/minted_shifts)*100) * 100) / 100 + '%';
+
+                            }
+
+                            $scope.ishodlingcolor = function(pools_data, address, pool_name, minted_shifts) {
+
+                                for (var i = 0; i < pools_balance.length; i++) {
+                                    if (pools_balance[i][0] == address) {
+                                       currentBalance = parseInt(pools_balance[i][1]*0.00000001);
+                                    }
+                                }
+
+                                poolPercentage = 0;
+                                for (var i = 0; i < pools_data.length; i++) {
+                                    if (pools_data[i].delegate == pool_name) {
+                                       poolPercentage = pools_data[i].share;
+                                    }
+                                    else {
+                                        if (!(poolPercentage != 0)) {
+                                          poolPercentage = 0;  
+                                        }    
+                                    }
+                                }
+
+                                if ((Math.round(parseFloat(((currentBalance*((poolPercentage/100)+1))/minted_shifts)*100) * 100) / 100) > 70) {
+                                    return 'chartreuse';
+                                }
+                                else {
+                                    return 'rgb(239, 132, 132)';
+                                }
+
+                            }
+                        });
+                    }
+
+
+                });
+            }
+        });
+    }
+
+    // if route is index
+    delegates_show();
 
 
     // if route is delegates show
@@ -93,7 +223,7 @@ app.controller('indexCtrl', function($scope, $http) {
                 $scope.pools = YAML.parse(res.data).pools;
                 $scope.countPools = YAML.parse(res.data).pools.length;
 
-                if(window.location.href.indexOf("/checkpools") > -1) {
+                if((window.location.href.indexOf("/checkpools") > -1) || (window.location.href.indexOf("/proofofhodl") > -1)) {
                     for (var i = 0; i < $scope.pools.length; i++){
                         var pool          = $scope.pools[i];
 
@@ -103,18 +233,18 @@ app.controller('indexCtrl', function($scope, $http) {
 
                     }
                 
+                    if(window.location.href.indexOf("/checkpools") > -1) {
+                        $http.get('https://wallet.shiftnrg.org/api/transactions?orderBy=timestamp:desc&limit=250&recipientId='+checkAddress).then (function (res) {
+                            window.eed = res;
+                            for (var i = 0; i < res.data.transactions.length; i++) {
+                                transaction = res.data.transactions[i];
 
-                    $http.get('https://wallet.shiftnrg.org/api/transactions?orderBy=timestamp:desc&limit=250&recipientId='+checkAddress).then (function (res) {
-                        window.eed = res;
-                        for (var i = 0; i < res.data.transactions.length; i++) {
-                            transaction = res.data.transactions[i];
-
-                            if(!($scope.transaction_list[transaction.senderId])) {
-                                $scope.transaction_list[transaction.senderId] = [transaction.id, transaction.timestamp, transaction.amount];
-                            }
-                        };
-                    });
-            
+                                if(!($scope.transaction_list[transaction.senderId])) {
+                                    $scope.transaction_list[transaction.senderId] = [transaction.id, transaction.timestamp, transaction.amount];
+                                }
+                            };
+                        });
+                    }
                 };
             });
 
@@ -157,6 +287,7 @@ app.controller('indexCtrl', function($scope, $http) {
                     }
                 }
             }
+
             $scope.explorer_link = function(pool_address) {
                 if ($scope.transaction_list[pool_address]) {
                     return 'https://explorer.shiftnrg.org/tx/' + $scope.transaction_list[pool_address][0];                    
@@ -281,40 +412,49 @@ app.controller('indexCtrl', function($scope, $http) {
             }
         }
 
+        function pad(n) {
+            var s = "000" + n;
+            return s.substr(s.length-4);
+        }
+
     	if (window.location.href.indexOf("/lottery") > -1) {
-	        $http.get('http://51.255.196.160:8000/data.json').then (function (res) {
-	            $scope.participants = res.data;
-        	});
 
 			$scope.getPercentage = function(percentage) {
 			   return percentage.toFixed(2);
 			}
 
 			$scope.getTicketsRange = function(percentage, index, last_voter_index) {
-				if (index > current_ticket_number_index) {
-					console.log(index);
-					number_of_tickets  = (percentage/100)*10000;
-					if (number_of_tickets >= 1) {
-						first_ticket_index = previous_ticket_number + 1;
-						last_ticket_index  = first_ticket_index + number_of_tickets - 1;
-					}
-					else {
-						first_ticket_index = 0;
-						last_ticket_index  = -1;
-					}
-				    previous_ticket_number = last_ticket_index;
+                if( ticketRange[index] === undefined ) {
+                    if (index > current_ticket_number_index) {
+                        number_of_tickets  = parseInt((percentage/100)*10000);
 
-				    if (index+1 == last_voter_index) {
-				    	last_ticket_index = '9999';
-				    }
-				    ticketRange[index] = [parseInt(first_ticket_index), parseInt(last_ticket_index)]
-				    current_ticket_number_index = current_ticket_number_index + 1;
+                        if (number_of_tickets >= 1) {
+                            first_ticket_index = parseInt(previous_ticket_number + 1);
+                            last_ticket_index  = parseInt(first_ticket_index + number_of_tickets - 1);
+                        }
+                        else {
+                            first_ticket_index = 0;
+                            last_ticket_index  = -1;
+                        }
 
-				}
+                        if (index+1 == last_voter_index) {
+                            last_ticket_index = '9999';
+                        }
 
-				return ('From ' + ticketRange[index][0] + ' to ' + ticketRange[index][1]);
+                        previous_ticket_number = last_ticket_index;
+
+                        ticketRange[index] = [parseInt(first_ticket_index), parseInt(last_ticket_index)]
+                        current_ticket_number_index = parseInt(current_ticket_number_index + 1);
+                        return ('From ' + ticketRange[index][0] + ' to ' + ticketRange[index][1]);
+                    }
+                    
+                }
+                else {
+                    return ('From ' + pad(ticketRange[index][0]) + ' to ' + pad(ticketRange[index][1]));                    
+                }
 			}
     	}
+
 
         $http.get ('https://wallet.shiftnrg.org/api/delegates/get?username=' + user).then (function (res) {
             $scope.delegate = res.data.delegate;
@@ -329,12 +469,7 @@ app.controller('indexCtrl', function($scope, $http) {
             $http.get('https://wallet.shiftnrg.org/api/delegates/voters?publicKey=' + res.data.delegate.publicKey).then (function (res) {
                $scope.voters = res.data.accounts;
 
-                if (!(window.location.href.indexOf("/pools") > -1) && !(window.location.href.indexOf("/checkpools") > -1)) {
-                    parseTable(2, 'desc', 10);
-                }
-                else {
-                    parseTable(0, 'asc', 101);
-                }
+               show_table();
             });
         });
     }
